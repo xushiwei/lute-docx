@@ -19,10 +19,11 @@ package main
 import (
 	"bytes"
 	"flag"
-	"github.com/88250/lute/render"
 	"io/ioutil"
 	"os"
 	"strings"
+
+	"github.com/88250/lute/render"
 
 	"github.com/88250/gulu"
 	"github.com/88250/lute/parse"
@@ -35,13 +36,13 @@ func init() {
 }
 
 func main() {
-	argMdPath := flag.String("mdPath", "D:/88250/lute-docx/sample.md", "待转换的 Markdown 文件路径")
-	argSavePath := flag.String("savePath", "D:/88250/lute-docx/sample.docx", "转换后 DOCX 的保存路径")
+	argMdPath := flag.String("mdPath", "./sample.md", "待转换的 Markdown 文件路径")
+	argSavePath := flag.String("savePath", "./sample-out.docx", "转换后 DOCX 的保存路径")
 
 	argCoverTitle := flag.String("coverTitle", "Lute DOCX - Markdown 生成 DOCX", "封面 - 标题")
 	argCoverAuthor := flag.String("coverAuthor", "88250", "封面 - 作者")
 	argCoverAuthorLink := flag.String("coverAuthorLink", "https://ld246.com/member/88250", "封面 - 作者链接")
-	argCoverLink := flag.String("coverLink", "https://github.com/88250/lute-docx", "封面 - 原文链接")
+	argCoverLink := flag.String("", "https://github.com/88250/lute-docx", "封面 - 原文链接")
 	argCoverSource := flag.String("coverSource", "GitHub", "封面 - 来源网站")
 	argCoverSourceLink := flag.String("coverSourceLink", "https://github.com", "封面 - 来源网站链接")
 	argCoverLicense := flag.String("coverLicense", "署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)", "封面 - 文档许可协议")
@@ -87,7 +88,7 @@ func main() {
 	tree := parse.Parse("", markdown, parseOptions)
 	renderOptions := render.NewOptions()
 	renderer := NewDocxRenderer(tree, renderOptions)
-	renderer.Cover = &DocxCover{
+	_ = &DocxCover{
 		Title:         coverTitle,
 		AuthorLabel:   coverAuthorLabel,
 		Author:        coverAuthor,
@@ -104,7 +105,8 @@ func main() {
 		LogoTitle:     coverLogoTitle,
 		LogoTitleLink: coverLogoTitleLink,
 	}
-	renderer.RenderCover()
+	/* renderer.Cover = _
+	renderer.RenderCover() */
 
 	renderer.Render()
 	renderer.Save(savePath)
